@@ -19,6 +19,7 @@
 
    const id1 = document.getElementById('id1');
    const vehicle1 = document.getElementById('vehicle1');
+   const coordinates1 = document.getElementById('coordinates1');
 
     const ulList2 = document.getElementById('list2');
     const d1div = document.getElementById('d1div');
@@ -40,6 +41,7 @@
    const status1 = dbRefObject1.child('Status');
     const iddriver1 = dbRefObject1.child('Id');
     const vehicledriver1 = dbRefObject1.child('Vehicle');
+    const vehiclecoordinates1 = dbRefObject1.child('Coordinates');
 
 
    const dbRefObject2 = firebase.database().ref().child('Driver2');
@@ -93,12 +95,23 @@
 
    });
 
+   //coordinates
+
+   vehiclecoordinates1.on('value', snap => {
+
+    const h1 = document.createElement('h1');
+    h1.innerText = snap.val();
+    h1.id = snap.key;
+    coordinates1.appendChild(h1);
+
+   });
+
 
 //smoke alcho state
     status1.on('child_added', snap => {
 
    	const li = document.createElement('li');
-   	li.innerText = snap.val();
+   	li.innerText = snap.key + " : "+snap.val();
    	li.id = snap.key;
    	smokestat1.appendChild(li);
 
@@ -107,9 +120,9 @@
     status1.on('child_changed', snap => {
 
    	const lichanged = document.getElementById(snap.key);
-   	lichanged.innerText = snap.val();
+   	lichanged.innerText = snap.key + " : "+snap.val();
    	if (snap.val()=='yes') {
-   		alert("smoking");
+   		document.getElementById('warn').innerHTML = "Driver may have drunk or smoking while driving!";
    	}
 
    });
